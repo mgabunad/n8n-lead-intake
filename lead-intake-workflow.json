@@ -1,0 +1,232 @@
+{
+  "name": "Lead Intake Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "2e529977-61e7-4a15-bb50-0d6dc9fb3533",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        0
+      ],
+      "id": "be0a9cb3-15a2-4654-a185-538d0c9c2396",
+      "name": "Webhook",
+      "webhookId": "2e529977-61e7-4a15-bb50-0d6dc9fb3533"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "932a08a5-2627-4ef5-b645-4f092d5ee59a",
+              "name": "name",
+              "value": "={{ $json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "9f3dfd0d-32ac-4187-a320-2a6be2627d87",
+              "name": "email",
+              "value": "={{ $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "7f5c4258-dbc3-4b01-b92a-25e1d1b6ecca",
+              "name": "message",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "e8d22f64-f4e9-42aa-9a8d-a8b9995b5928",
+              "name": "received_at",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -48,
+        0
+      ],
+      "id": "a4cc3a9b-3997-4a42-ba10-af08da3e6973",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1E0TdNhR2Nk7ZY91ypnFO-75F79r-NiDbOIudy_AUBek",
+          "mode": "list",
+          "cachedResultName": "Lead Intake",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E0TdNhR2Nk7ZY91ypnFO-75F79r-NiDbOIudy_AUBek/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E0TdNhR2Nk7ZY91ypnFO-75F79r-NiDbOIudy_AUBek/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "received_at",
+              "displayName": "received_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        176,
+        0
+      ],
+      "id": "f33fad5e-fd81-4e5c-b484-02db7b3f22af",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GalH1rSIGf4xjUGd",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "you@example.com",
+        "subject": "=New lead: {{ $json.name }}",
+        "message": "=Name: {{ $json.name }}<br>Email: {{ $json.email }}<br>Message: {{ $json.message }}<br>Received: {{ $json.received_at }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        0
+      ],
+      "id": "050c9807-263e-4e87-bd27-5093dfa3202a",
+      "name": "Send a message",
+      "webhookId": "8b8f7918-760a-4242-80eb-682db88da376",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "9RHnEkeR6H5Pq1xl",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {},
+          "params": {},
+          "query": {},
+          "body": {
+            "name": "Test Lead",
+            "email": "test@example.com",
+            "message": "Hello, I need a website"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "1d4746b9-4003-492e-b80a-2b60285b1768",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2a33bb03e6bb119025d48a48877aa868a5b3e3ef9a1359f81cc275230a41a22e"
+  },
+  "nodeGroups": [],
+  "id": "HGNoZj8SXKIZQewu",
+  "tags": []
+}
